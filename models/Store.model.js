@@ -19,10 +19,19 @@ const StoreSchema = new Schema ({
     },
     items: {
         type: [Schema.Types.ObjectId],
-        ref: "item"
+        ref: "Item"
     },
     owner: {
         type: [Schema.Types.ObjectId],
-        ref: "user"
+        ref: "User"
     }
-})  
+},
+{
+    timestamps: true
+}) 
+
+
+
+const Store = model("Store", storeSchema);
+
+module.exports = Store;
