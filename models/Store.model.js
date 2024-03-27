@@ -17,7 +17,7 @@ const StoreSchema = new Schema ({
         type: String,
         default: "white"
     },
-    items: {
+    products: {
         type: [Schema.Types.ObjectId],
         ref: "Item"
     },
