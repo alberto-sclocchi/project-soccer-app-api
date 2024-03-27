@@ -3,7 +3,8 @@ const { Schema, module } = require("mongoose");
 const productSchema = new Schema ({
     category: {
         type: String,
-        required: true
+        required: true,
+        enum: ["accessories", "training gear", "clothing"]
     },
     name: {
         type: String,
@@ -12,6 +13,9 @@ const productSchema = new Schema ({
     description: {
         type: String,
         required: true
+    },
+    brand: {
+        type: String
     },
     image: {
         type: String, 
@@ -32,11 +36,14 @@ const productSchema = new Schema ({
     materials: {
         type: [String]
     },
+    colors: {
+        type: [String]
+    },
     productsInStock: {
         type: Number,
     }, 
     addedBy: {
-        type: [Schema.Types.ObjectId],
+        type: Schema.Types.ObjectId,
         ref: "User"
     }
 },

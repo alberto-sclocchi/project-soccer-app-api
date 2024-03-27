@@ -3,15 +3,15 @@ const { Schema, module } = require("mongoose");
 const StoreSchema = new Schema ({
     name: {
         type: String,
-        required: true
     },
     description: {
         type: String,
-        required: true
     },
     logo: {
         type: String, 
-        required: true
+    },
+    address: {
+        Type: String
     },
     colorBanner: {
         type: String,
@@ -22,8 +22,12 @@ const StoreSchema = new Schema ({
         ref: "Item"
     },
     owner: {
-        type: [Schema.Types.ObjectId],
+        type: Schema.Types.ObjectId,
         ref: "User"
+    }, 
+    data: {
+        Type: Date,
+        default: Date.now
     }
 },
 {
