@@ -1,6 +1,6 @@
-const { Schema, module } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const StoreSchema = new Schema ({
+const storeSchema = new Schema ({
     name: {
         type: String,
     },
@@ -11,23 +11,23 @@ const StoreSchema = new Schema ({
         type: String, 
     },
     address: {
-        Type: String
+        type: String
     },
     colorBanner: {
         type: String,
-        default: "white"
+        enum: ["white", "red", "lightgreen", "green", "lightblue", "blue", "pink", "violet"]
     },
     products: {
         type: [Schema.Types.ObjectId],
-        ref: "Item"
+        ref: "Product"
     },
     owner: {
         type: Schema.Types.ObjectId,
         ref: "User"
     }, 
     data: {
-        Type: Date,
-        default: Date.now
+        type: Date,
+        default: Date.Now
     }
 },
 {
