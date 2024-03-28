@@ -10,24 +10,33 @@ const storeSchema = new Schema ({
     logo: {
         type: String, 
     },
+    city: {
+        type: String
+    },
+    state: {
+        type: String
+    },
     address: {
         type: String
     },
     colorBanner: {
         type: String,
-        enum: ["white", "red", "lightgreen", "green", "lightblue", "blue", "pink", "violet"]
+        enum: ["white", "red", "lightgreen", "green", "lightblue", "blue", "pink", "purple"]
+    },
+    sponsor: {
+        type: String
     },
     products: {
         type: [Schema.Types.ObjectId],
         ref: "Product"
     },
-    owner: {
+    manager: {
         type: Schema.Types.ObjectId,
         ref: "User"
     }, 
-    data: {
+    date: {
         type: Date,
-        default: Date.Now
+        default: Date.now
     }
 },
 {

@@ -6,18 +6,31 @@ const Product = require("../models/Product.model")
 
 //GET stores
 router.get("/", (req, res, next) => {
-    Store.find()
+    Store.find().populate("manager")
     .then((stores)=> {
-    res.json({success: true, data: stores})
+      res.json({success: true, data: stores})
     })
     .catch((err) => {
-    res.json({success: false, data: err})
+      res.json({success: false, data: err})
     })
 });
 
+
+//GET stores
+router.get("/manager", (req, res, next) => {
+  Store.find({ manager : req.session.currentUser._id}).populate("manager")
+  .then((managerStores)=> {
+    res.json({success: true, data: managerStores})
+  })
+  .catch((err) => {
+    res.json({success: false, data: err})
+  })
+});
+
+
 //POST add store
 router.post("/", (req, res, next) => {
-    Store.create(req.body.store)
+    Store.create({...req.body, manager: req.session.currentUser._id})
     .then((store)=> {
       res.json({success: true, data: store})
     })
@@ -30,7 +43,8 @@ router.post("/", (req, res, next) => {
 router.get("/:id", (req, res, next) => {
     Store.findById(req.params.id)
     .then((store)=> {
-      res.json({success: true, data: store})
+      const date = store.date.toLocaleDateString();
+      res.json({success: true, data: {...store, date}})
     })
     .catch((err) => {
       res.json({success: false, data: err})
@@ -53,7 +67,7 @@ router.delete("/:id", async (req, res, next) => {
 
 //UPDATE store
 router.put("/:id", (req, res, next) => {
-    Store.findByIdAndUpdate(req.params.id, req.params.id)
+    Store.findByIdAndUpdate(req.params.id, req.body)
     .then((store)=> {
       res.json({success: true, data: store})
     })
