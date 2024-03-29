@@ -23,8 +23,8 @@ const storeSchema = new Schema ({
         type: String,
         enum: ["white", "red", "lightgreen", "green", "lightblue", "blue", "pink", "purple"]
     },
-    sponsor: {
-        type: String
+    sponsors: {
+        type: [String]
     },
     products: {
         type: [Schema.Types.ObjectId],

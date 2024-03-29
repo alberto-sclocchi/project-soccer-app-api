@@ -41,10 +41,9 @@ router.post("/", (req, res, next) => {
 
 //GET store details
 router.get("/:id", (req, res, next) => {
-    Store.findById(req.params.id)
+    Store.findById(req.params.id).populate("manager")
     .then((store)=> {
-      const date = store.date.toLocaleDateString();
-      res.json({success: true, data: {...store, date}})
+      res.json({success: true, data: store})
     })
     .catch((err) => {
       res.json({success: false, data: err})
