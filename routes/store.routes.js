@@ -66,7 +66,7 @@ router.delete("/:id", async (req, res, next) => {
 
 //UPDATE store
 router.put("/:id", (req, res, next) => {
-    Store.findByIdAndUpdate(req.params.id, req.body)
+    Store.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate("manager")
     .then((store)=> {
       res.json({success: true, data: store})
     })
