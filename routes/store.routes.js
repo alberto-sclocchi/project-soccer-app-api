@@ -30,6 +30,8 @@ router.get("/manager", (req, res, next) => {
 
 //POST add store
 router.post("/", (req, res, next) => {
+  console.log({currentUser: req.session.currentUser})
+
     Store.create({...req.body, manager: req.session.currentUser._id})
     .then((store)=> {
       res.json({success: true, data: store})

@@ -4,7 +4,7 @@ const productSchema = new Schema ({
     category: {
         type: String,
         required: true,
-        enum: ["accessories", "training gear", "clothing"]
+        enum: ["accessories", "equipment", "clothing"]
     },
     name: {
         type: String,
@@ -23,7 +23,6 @@ const productSchema = new Schema ({
     },
     size: {
         type: String,
-        default: "n/a"
     },
     price: {
         type: Number,
