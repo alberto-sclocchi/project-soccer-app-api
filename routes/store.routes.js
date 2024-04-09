@@ -30,8 +30,6 @@ router.get("/manager", (req, res, next) => {
 
 //POST add store
 router.post("/", (req, res, next) => {
-  console.log({currentUser: req.session.currentUser})
-
     Store.create({...req.body, manager: req.session.currentUser._id})
     .then((store)=> {
       res.json({success: true, data: store})
@@ -43,7 +41,7 @@ router.post("/", (req, res, next) => {
 
 //GET store details
 router.get("/:id", (req, res, next) => {
-    Store.findById(req.params.id).populate("manager")
+    Store.findById(req.params.id).populate("manager").populate("products")
     .then((store)=> {
       res.json({success: true, data: store})
     })
@@ -55,8 +53,8 @@ router.get("/:id", (req, res, next) => {
 //DELETE store 
 router.delete("/:id", async (req, res, next) => {
     try{
-        const store = await Store.findById(req.params.id);
-        const productsDeleted = await Product.deleteMany({ _id : {$in : [...store.products]}});
+        // const store = await Store.findById(req.params.id);
+        // const productsDeleted = await Product.deleteMany({ _id : {$in : [...store.products]}});
         const storeDeleted = await Store.findByIdAndDelete(req.params.id);
         
         res.json({success: true, data: "Store successfully removed."})
@@ -68,7 +66,7 @@ router.delete("/:id", async (req, res, next) => {
 
 //UPDATE store
 router.put("/:id", (req, res, next) => {
-    Store.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate("manager")
+    Store.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate("manager").populate("products")
     .then((store)=> {
       res.json({success: true, data: store})
     })
