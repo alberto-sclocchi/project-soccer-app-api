@@ -53,10 +53,7 @@ router.get("/:id", (req, res, next) => {
 //DELETE store 
 router.delete("/:id", async (req, res, next) => {
     try{
-        // const store = await Store.findById(req.params.id);
-        // const productsDeleted = await Product.deleteMany({ _id : {$in : [...store.products]}});
         const storeDeleted = await Store.findByIdAndDelete(req.params.id);
-        
         res.json({success: true, data: "Store successfully removed."})
 
     } catch (err) { 

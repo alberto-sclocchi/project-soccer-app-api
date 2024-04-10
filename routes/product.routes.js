@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-// const Store = require("../models/Store.model");
+const Store = require("../models/Store.model");
 const Product = require("../models/Product.model")
 
 
@@ -43,9 +43,9 @@ router.post("/", (req, res, next) => {
 //DELETE product 
 router.delete("/:id", async (req, res, next) => {
   try{
-      // const store = await Store.findById(req.params.id);
-      // const productsDeleted = await Product.deleteMany({ _id : {$in : [...store.products]}});
-      const storeDeleted = await Store.findByIdAndDelete(req.params.id);
+      const product = await Product.findById(req.params.id);
+      const storeProductsDeleted = await Store.updateMany({ products : product._id}, {$pull: {products : product._id}}, {multi: true});
+      const productsDeleted = await Product.findByIdAndDelete(req.params.id);
       
       res.json({success: true, data: "Product successfully removed."})
 
@@ -53,6 +53,18 @@ router.delete("/:id", async (req, res, next) => {
       res.json({success: false, data: err})
   }
 });
+
+//UPDATE store
+router.put("/:id", (req, res, next) => {
+  Product.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate("addedBy")
+  .then((product)=> {
+    res.json({success: true, data: product})
+  })
+  .catch((err) => {
+    res.json({success: false, data: err})
+  })
+});
+
 
 
 module.exports = router;
