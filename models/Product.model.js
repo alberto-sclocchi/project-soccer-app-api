@@ -41,6 +41,10 @@ const productSchema = new Schema ({
     productsInStock: {
         type: Number,
     }, 
+    likes: {
+        type: [Schema.Types.ObjectId],
+        ref: "User"
+    },
     addedBy: {
         type: Schema.Types.ObjectId,
         ref: "User"

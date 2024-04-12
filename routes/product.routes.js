@@ -15,6 +15,16 @@ router.get("/", (req, res, next) => {
     })
 });
 
+//GET liked products
+router.get("/liked-products", (req, res, next) => {
+  Product.find({likes: req.session.currentUser._id })
+  .then((likedProducts)=> {
+    res.json({success: true, data: likedProducts})
+  })
+  .catch((err) => {
+    res.json({success: false, data: err})
+  })
+});
 
 //GET product details
 router.get("/:id", (req, res, next) => {
@@ -54,7 +64,7 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-//UPDATE store
+//UPDATE product
 router.put("/:id", (req, res, next) => {
   Product.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate("addedBy")
   .then((product)=> {
