@@ -22,6 +22,10 @@ const userSchema = new Schema(
       type: String,
       required: true
     },
+    profileImg:{
+      type: String,
+      default:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/2048px-Windows_10_Default_Profile_Picture.svg.png"
+    },
     role: {
       type: String,
       required: true,
