@@ -8,6 +8,9 @@ const CartSchema = new Schema ({
     user: {
         type: Schema.Types.ObjectId,
         ref: "User"
+    },
+    isClosed: {
+        type: Boolean
     }
 },
 {
