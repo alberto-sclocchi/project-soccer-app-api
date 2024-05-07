@@ -16,10 +16,13 @@ const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 // How many rounds should bcrypt run the salt (default - 10 rounds)
 const saltRounds = 10;
 
+//Nodemailer
+const transporter = require ("../config/nodemailer.js")
+
 // POST /auth/signup  - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
   console.log(req.body);
-  const { email, password, name, username, role} = req.body;
+  const { email, password, name, username, role, confirmation} = req.body;
 
   // Check if email or password or name are provided as empty strings
   if (email === "" || password === "" || username === "" || name === "") {
@@ -56,6 +59,21 @@ router.post("/signup", (req, res, next) => {
       // If email is unique, proceed to hash the password
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
+
+      if(confirmation){
+        transporter.sendMail({
+            from: "KickShop@mail.com",
+            to: email,
+            subject: "Thank you for signing up",
+            text: "Thank you for signing up", 
+            html: `<h2>Hi there, ${username}</h2>
+            <h4>Thank you for signing up in KickShop.<h4>
+            <hr>
+            <p>You can now create your own store, and buy or sell products. Good luck 😊.
+            <br><img src="https://i.gifer.com/2DV.gif" style="width: 150px; margin-top: 20px">
+            <p> Sincerely, <br>your KickShop Team</p>`
+        });
+    }
 
       // Create the new user in the database
       // We return a pending promise, which allows us to chain another `then`
