@@ -27,6 +27,9 @@ app.use("/store", require("./routes/store.routes"));
 
 app.use("/product", require("./routes/product.routes"));
 
+app.use("/cart", require("./routes/cart.routes"));
+
+
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
