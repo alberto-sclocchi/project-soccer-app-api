@@ -5,13 +5,15 @@ const User = require ("../models/User.model")
 
 //GET all carts
 router.get("/", (req, res, next) => {
-    Cart.findOne({$and : [{user: req.session.currentUser._id}, {isClosed: false}]}).populate("user").populate("products")
-    .then((cart)=> {
-      res.json({success: true, data: cart})
-    })
-    .catch((err) => {
-      res.json({success: false, data: err})
-    })
+    if(req.session.currentUser){
+        Cart.findOne({$and : [{user: req.session.currentUser._id}, {isClosed: false}]}).populate("user").populate("products")
+        .then((cart)=> {
+          res.json({success: true, data: cart})
+        })
+        .catch((err) => {
+          res.json({success: false, data: err})
+        })
+    }
 });
   
 
@@ -30,8 +32,18 @@ router.post("/",  (req, res, next) => {
 
 });
 
+//UPDATE cart (close)
+router.put("/close/:cartId", (req,res) => {
+    Cart.findByIdAndUpdate(req.params.cartId, req.body, {new: true}).populate("products").populate("user")
+    .then((cartUpdate)=> {
+        res.json({success: true, data: cartUpdate})
+    })
+    .catch((err) => {
+        res.json({success: false, data: err})
+    })
+})
 
-// UPDATE cart 
+// UPDATE cart (product)
 router.put("/:productId", (req, res) => {
 	Cart.findOne({$and : [{user: req.session.currentUser._id}, {isClosed: false}]}).populate("user").populate("products")
     .then((cart) => {
@@ -56,6 +68,7 @@ router.put("/:productId", (req, res) => {
         }).catch(err => res.json({success: false, error: err}));
     }).catch(err => res.json({success: false, error: err}));
 })
+
 
 
 module.exports = router;
