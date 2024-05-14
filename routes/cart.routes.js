@@ -19,7 +19,7 @@ router.get("/", (req, res, next) => {
 router.post("/",  (req, res, next) => {
     User.findOne({email: req.body.email})
     .then((user) => {
-        Cart.create({user: user._id, isClosed: false})
+        Cart.create({user: user._id, isClosed: false, totalPrice: 0})
         .then((cartAdded)=> {
             res.json({success: true, data: cartAdded})
         })
@@ -36,23 +36,25 @@ router.put("/:productId", (req, res) => {
 	Cart.findOne({$and : [{user: req.session.currentUser._id}, {isClosed: false}]}).populate("user").populate("products")
     .then((cart) => {
         // console.log({body: req.body});
-
-		if(!!req.body.removeContent) {
-			cart.products.pull(req.params.productId)
-		} else {
-			cart.products.push(req.params.productId)
-		}
-
-		cart.save()
-        .then((updatedCart) => {
-            console.log({updatedCart})
-			res.json({success: true, data: updatedCart});
-		})
-        .catch((err) => {
-            res.json({success: false, error: err})
-        });
-
-	}).catch(err => res.json({success: false, error: err}));
+        Product.findById(req.params.productId)
+        .then((product) => {
+            if(!!req.body.removeContent) {
+                cart.products.pull(product._id)
+                cart.totalPrice -= product.price;
+            } else {
+                cart.products.push(product._id)
+                cart.totalPrice += product.price;
+            }
+            cart.save()
+            .then((updatedCart) => {
+                console.log({updatedCart})
+                res.json({success: true, data: updatedCart});
+            })
+            .catch((err) => {
+                res.json({success: false, error: err})
+            });
+        }).catch(err => res.json({success: false, error: err}));
+    }).catch(err => res.json({success: false, error: err}));
 })
 
 

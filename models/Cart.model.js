@@ -11,6 +11,9 @@ const CartSchema = new Schema ({
     },
     isClosed: {
         type: Boolean
+    },
+    totalPrice: {
+        type: Number
     }
 },
 {
