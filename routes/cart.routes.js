@@ -57,6 +57,9 @@ router.put("/:productId", (req, res) => {
                 cart.products.push(product._id)
                 cart.totalPrice += product.price;
             }
+
+            cart.totalPrice = Math.round(cart.totalPrice * 100.0) / 100.0;
+            
             cart.save()
             .then((updatedCart) => {
                 console.log({updatedCart})
