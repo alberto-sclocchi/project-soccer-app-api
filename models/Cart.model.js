@@ -14,6 +14,15 @@ const CartSchema = new Schema ({
     },
     totalPrice: {
         type: Number
+    },
+    city: {
+        type: String
+    },
+    state: {
+        type: String
+    },
+    address: {
+        type: String
     }
 },
 {

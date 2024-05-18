@@ -21,7 +21,13 @@ router.get("/", (req, res, next) => {
 router.post("/",  (req, res, next) => {
     User.findOne({email: req.body.email})
     .then((user) => {
-        Cart.create({user: user._id, isClosed: false, totalPrice: 0})
+
+        if(!user){
+            res.json({message: "Cart was not added"});
+            return;
+        }
+
+        Cart.create({user: user._id, isClosed: false, totalPrice: 0, address: "", state: "", city: ""})
         .then((cartAdded)=> {
             res.json({success: true, data: cartAdded})
         })
@@ -34,13 +40,20 @@ router.post("/",  (req, res, next) => {
 
 //UPDATE cart (close)
 router.put("/close/:cartId", (req,res) => {
-    Cart.findByIdAndUpdate(req.params.cartId, req.body, {new: true}).populate("products").populate("user")
-    .then((cartUpdate)=> {
-        res.json({success: true, data: cartUpdate})
-    })
-    .catch((err) => {
-        res.json({success: false, data: err})
-    })
+
+    if(req.body.address === "" || req.body.city === "" || req.body.state === ""){
+        res.json({message: "Complete the shipping info in order to proceed."})
+        return;
+    } else {
+        Cart.findByIdAndUpdate(req.params.cartId, req.body, {new: true}).populate("products").populate("user")
+        .then((cartUpdate)=> {
+            res.json({success: true, data: cartUpdate})
+        })
+        .catch((err) => {
+            res.json({success: false, data: err})
+        })
+    }
+
 })
 
 // UPDATE cart (product)

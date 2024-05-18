@@ -29,7 +29,8 @@ const userSchema = new Schema(
     role: {
       type: String,
       required: true,
-      enum: ["buyer", "manager"]
+      enum: ["buyer", "manager"],
+      default: "buyer"
     }
   },
   {

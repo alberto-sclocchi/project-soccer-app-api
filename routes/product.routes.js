@@ -66,6 +66,7 @@ router.delete("/:id", async (req, res, next) => {
 
 //UPDATE product
 router.put("/:id", (req, res, next) => {
+  
   Product.findByIdAndUpdate(req.params.id, req.body, {new: true}).populate("addedBy")
   .then((product)=> {
     res.json({success: true, data: product})
