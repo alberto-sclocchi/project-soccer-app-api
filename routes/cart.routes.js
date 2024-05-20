@@ -5,15 +5,19 @@ const User = require ("../models/User.model")
 
 //GET all carts
 router.get("/", (req, res, next) => {
-    if(req.session.currentUser){
-        Cart.findOne({$and : [{user: req.session.currentUser._id}, {isClosed: false}]}).populate("user").populate("products")
-        .then((cart)=> {
-          res.json({success: true, data: cart})
-        })
-        .catch((err) => {
-          res.json({success: false, data: err})
-        })
+    if(!req.session.currentUser){
+        res.json({message: "Cart was not found"});
+        return;
     }
+
+    Cart.findOne({$and : [{user: req.session.currentUser._id}, {isClosed: false}]}).populate("user").populate("products")
+    .then((cart)=> {
+        res.json({success: true, data: cart})
+    })
+    .catch((err) => {
+        res.json({success: false, data: err})
+    })
+
 });
   
 
