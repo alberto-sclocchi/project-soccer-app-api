@@ -3,7 +3,7 @@ const Cart = require ("../models/Cart.model");
 const Product = require ("../models/Product.model");
 const User = require ("../models/User.model")
 
-//GET all carts
+//GET carts
 router.get("/", (req, res, next) => {
     if(!req.session.currentUser){
         res.json({message: "Cart was not found"});
@@ -13,6 +13,23 @@ router.get("/", (req, res, next) => {
     Cart.findOne({$and : [{user: req.session.currentUser._id}, {isClosed: false}]}).populate("user").populate("products")
     .then((cart)=> {
         res.json({success: true, data: cart})
+    })
+    .catch((err) => {
+        res.json({success: false, data: err})
+    })
+
+});
+
+//GET all carts
+router.get("/transactions", (req, res, next) => {
+    if(!req.session.currentUser){
+        res.json({message: "Cart was not found"});
+        return;
+    }
+
+    Cart.find({$and : [{user: req.session.currentUser._id}, {isClosed: true}]}).populate("user").populate("products")
+    .then((allCarts)=> {
+        res.json({success: true, data: allCarts})
     })
     .catch((err) => {
         res.json({success: false, data: err})
