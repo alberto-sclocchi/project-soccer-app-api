@@ -19,6 +19,9 @@ const saltRounds = 10;
 //Nodemailer
 const transporter = require ("../config/nodemailer.js")
 
+//Cloudinary
+const uploadCloud = require("../config/cloudinary.js")
+
 // POST /auth/signup  - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
   console.log(req.body);
@@ -160,5 +163,34 @@ router.get("/logout", (req, res, next) =>{
     res.json({message: "Successfully logged out."})
   } 
 });
+
+
+//UPDATE profile image
+router.patch("/editImage/:userId", uploadCloud.single("profileImg"), (req, res, next) =>{
+  // console.log({file: req.file})
+
+  User.findByIdAndUpdate( req.params.userId, {profileImg: req.file.path}, {new: true})
+  .then((updatedUser) => {
+    req.session.currentUser.profileImg = req.file.path;
+
+    res.json({success: true, data: updatedUser})
+  })
+  .catch((err) => res.json({success: false, data: err}))
+});
+
+
+//UPDATE user profile 
+router.put("/edit/:userId", (req, res, next) =>{
+
+  User.findByIdAndUpdate( req.params.userId, req.body, {new: true})
+  .then((updatedUser) => {
+    req.session.currentUser.email = req.body.email;
+    req.session.currentUser.name = req.body.name;
+
+    res.json({success: true, data: updatedUser})
+  })
+  .catch((err) => res.json({success: false, data: err}))
+});
+
 
 module.exports = router;
